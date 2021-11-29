@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'rest_auth.registration',
+    'racing',
 ]
 SITE_ID = 1
 
@@ -54,6 +55,7 @@ REST_FRAMEWORK = {
         # 'rest_framework.authentication.BasicAuthentication'
         'rest_framework.authentication.TokenAuthentication',
         #  'rest_framework_simplejwt.authentication.JWTAuthentication',
+
     ],
     'DEFAULT_PERMISSION_CLASSES':[
         #  'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
