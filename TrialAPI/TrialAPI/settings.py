@@ -53,13 +53,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
         # 'rest_framework.authentication.SessionAuthentication',
         # 'rest_framework.authentication.BasicAuthentication'
-        'rest_framework.authentication.TokenAuthentication',
+        # 'rest_framework.authentication.TokenAuthentication',
         #  'rest_framework_simplejwt.authentication.JWTAuthentication',
+        
 
     ],
     'DEFAULT_PERMISSION_CLASSES':[
         #  'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-         'rest_framework.permissions.IsAuthenticated',
+        #  'rest_framework.permissions.IsAuthenticated',
+        'rest_framework.permissions.AllowAny',
 
     ],
     'DEFAULT_THROTTLE_CLASSES': [
@@ -67,7 +69,7 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '2/day',
+        'anon': '10/day',
         'user': '4/day',
         #to set custom throttle for particular apps (We need to set throttle scope in those particular apps)
         #It's easy to set throttle scope in class based view
