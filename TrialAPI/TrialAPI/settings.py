@@ -69,8 +69,8 @@ REST_FRAMEWORK = {
         'rest_framework.throttling.UserRateThrottle'
     ],
     'DEFAULT_THROTTLE_RATES': {
-        'anon': '10/day',
-        'user': '4/day',
+        'anon': '500/day',
+        'user': '500/day',
         #to set custom throttle for particular apps (We need to set throttle scope in those particular apps)
         #It's easy to set throttle scope in class based view
         # 'first_app':'2/day',

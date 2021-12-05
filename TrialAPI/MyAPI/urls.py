@@ -8,6 +8,7 @@ router.register("cars",car_specView,basename="cars")
 urlpatterns = [
     # path('home', home),
     url('home/',home),
-    url('',include(router.urls))
+    url('',include(router.urls)),
+    url('carsapi',CarsAPIView.as_view())
     
 ]
