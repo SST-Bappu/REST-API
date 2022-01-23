@@ -3,6 +3,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny,IsAuthenticated
 from rest_framework import viewsets
+from rest_framework.serializers import Serializer
 from rest_framework.views import APIView
 from .models import *
 from .serializer import *
@@ -12,18 +13,17 @@ from .serializer import *
 # @permission_classes([IsAuthenticated])
 def home(request):
     print(request.query_params)
-    # id = int(request.query_params['id'])
+    id = int(request.query_params['id'])
+    key = int(request.query_params['key'])
     # key = request.query_params['key']
     id = 10
-    key=76576
-    modified_id = id * 100
-    return Response({'message':'My first touch on rest framework','mod_id':modified_id,'key':key})
+    key=id*key
+    return Response({'message':'My first touch on rest framework','id':id,'key':key})
 
 
 #Viewsets
 class car_specView(viewsets.ModelViewSet):
     serializer_class = CarSpeSerializer
-    permission_classes = [AllowAny]
     def get_queryset(self):
         carSpec = car_spec.objects.all()
         return carSpec
@@ -41,7 +41,7 @@ class car_specView(viewsets.ModelViewSet):
     def create(self,request,*args,**kwargs):
         car_data = request.data
 
-        new_car = car_spec.objects.create(brand=car_data['brand'],model=car_data['model'],
+        new_car = car_spec.objects.create(id = car_data['id'],brand=car_data['brand'],model=car_data['model'],
         produc_year=car_data['produc_year'],engine_type=car_data['engine_type'])
 
         new_car.save()
@@ -56,6 +56,27 @@ class car_specView(viewsets.ModelViewSet):
         return Response({'message':'Object has been deleted'})
         # else:
         #     return Response({'message':'You are not allowed to perform this operation'})
+    #def update(self,request,*args,**kwargs):
+    
+    def update(self,request,*args,**kargs):
+        instance = self.get_object()
+        serializer = CarSpeSerializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #APIVIEW
 
@@ -67,9 +88,11 @@ class CarsAPIView(APIView):
         return cars
 
     def get(self,request,*args,**kwargs):
+
+        print(args)
         try:
             urlparms = request.query_params['id']
-            cars = car_spec.objects.filter(brand = urlparms)
+            cars = car_spec.objects.filter(id = urlparms)
         except:
             cars = self.get_queryset()
         serializer = CarSpeSerializer(cars,many = True)
@@ -84,3 +107,16 @@ class CarsAPIView(APIView):
         new_car.save()
         serializer = CarSpeSerializer(new_car)
         return Response(serializer.data)
+    
+    def put(self,request,*args,**kwargs):
+        id = request.query_params['id']
+        newcar = car_spec.objects.get(id = id)
+        data = request.data
+        newcar.id = data['id']
+        newcar.brand = data['brand']
+        newcar.model = data['model']
+        newcar.produc_year = data['produc_year']
+        newcar.engine_type = data['engine_type']
+
+        newcar.save()
+        return Response(data)
